@@ -94,7 +94,8 @@ def main():
         ts, ev, msg = ln.split(",", 2)
         log_dict[ts] = {"event": ev, "message": msg}
 
-    print(log_dict)
+#    print(log_dict)
+    print(json.dumps(log_dict, ensure_ascii=False, indent=2))
     with open("mission_computer_main.json", "w", encoding="utf-8") as f:
         json.dump(log_dict, f, ensure_ascii=False, indent=2)
         print("mission_computer_main.json 이름으로 딕셔너리 로그 저장 완료!")

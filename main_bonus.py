@@ -1,16 +1,16 @@
-import json
+import json #json을 불러옵니다
 
-DANGER_KEYWORDS = ["explosion", "unstable", "oxygen", "failure", "malfunction"]
+DANGER_KEYWORDS = ["explosion", "unstable", "oxygen", "failure", "malfunction"] ## Bonus 과제: 위험 키워드 리스트
 
-def read_log_lines(path="mission_computer_main.log"):
-    lines = []
-    with open(path, "r", encoding="utf-8", errors="replace") as f:
-        first = f.readline()
-        if first and first.strip().lower().startswith("timestamp,event,message"):
-            pass
+def read_log_lines(path="mission_computer_main.log"): #log 파일을 읽어오는 함수
+    lines = [] #우선 빈 lines라는 array를 만들어 둡니다
+    with open(path, "r", encoding="utf-8", errors="replace") as f: #with: 이하의 명령을 실행하고 자동으로 close됩니다.
+        first = f.readline() 
+        if first and first.strip().lower().startswith("timestamp,event,message"): #만약 log의 첫줄은 카테고리니까..
+            pass #제껴줍니다.
         else:
-            if first:
-                lines.append(first.strip())
+            if first: #읽어들인 다음 줄이 존재한다면
+                lines.append(first.strip()) #strip한 first 의
         for ln in f:
             lines.append(ln.strip())
     return lines
@@ -21,7 +21,7 @@ def print_sorted_desc(path="mission_computer_main.log"):
         ts, ev, msg = ln.split(",", 2)
         print(f"{ts} | {ev} | {msg}")
 
-def parse_line(ln: str):
+def parse_line(ln: str): # Bonus용
     ts, ev, msg = ln.split(",", 2)
     return ts, ev, msg
 
@@ -34,7 +34,9 @@ def save_danger_logs(out_path="danger_logs.txt", log_path="mission_computer_main
         if any(kw.casefold() in blob for kw in DANGER_KEYWORDS):
             picked.append(ln)
     picked.sort(reverse = True)
-
+    print(picked)
+ 
+    print(type([kw.casefold() in blob for kw in DANGER_KEYWORDS]))
     with open(out_path, "w", encoding="utf-8") as f:
         for ln in picked:
             f.write(ln+"\n")
@@ -85,6 +87,7 @@ def main():
         if pin == "y":
             break
         elif pin == "n":
+            print("시스템을 종료합니다.")
             return
         else:
             print ("잘못된 입력입니다. 다시 입력해 주세요")
@@ -119,6 +122,7 @@ def main():
         if pin == "y":
             break
         elif pin == "n":
+            print("시스템을 종료합니다.")
             return
         else:
             print ("잘못된 입력입니다. 다시 입력해 주세요")
@@ -139,6 +143,7 @@ def main():
             if pin == "y":
                 break
             elif pin == "n":
+                print("시스템을 종료합니다.")
                 return
             else:
                 print ("잘못된 입력입니다. 다시 입력해 주세요")
@@ -166,6 +171,7 @@ def main():
             if pin == "y":
                 break
             elif pin == "n":
+                print("시스템을 종료합니다.")
                 return
             else:
                 print ("잘못된 입력입니다. 다시 입력해 주세요")
@@ -177,7 +183,8 @@ def main():
         ts, ev, msg = ln.split(",", 2)
         log_dict[ts] = {"event": ev, "message": msg}
     
-    print(log_dict)
+    # print(log_dict)
+    print(json.dumps(log_dict, ensure_ascii=False, indent=2))
     with open("mission_computer_main.json", "w", encoding="utf-8") as f:
         json.dump(log_dict, f, ensure_ascii=False, indent=2)
         print("mission_computer_main.json 이름으로 딕셔너리 로그 저장 완료!")
@@ -191,6 +198,7 @@ def main():
                     print(f"[에러] 위험 로그 저장 실패: {e}")
                 break    
             elif pin == "n":
+                print("시스템을 종료합니다.")
                 return
             else:
                 print ("잘못된 입력입니다. 다시 입력해 주세요")
@@ -220,5 +228,5 @@ def main():
 if __name__ == "__main__":
     main()
 
-    # TODO: 마지막 질문 부분 조금만 손보기 []
-    # TODO: 쫙 처음부터 주석 달면서 코드 이해하기 [ ]
+    # TODO: 마지막 질문 부분 조금만 손보기 [o]
+    # TODO: 쫙 처음부터 주석 달면서 코드 이해하기 [o]
